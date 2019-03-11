@@ -137,7 +137,9 @@ class Mega(object):
     def download_from_url(self, url):
         url_object = URLObject(url)
         file_id, file_key = url_object.fragment[1:].split('!')
-        self.download_file(file_id, file_key, public=True)
+        
+        #return the filename
+        return self.download_file(file_id, file_key, public=True)
 
     def download_file(self, file_id, file_key, public=False, store_path=None):
         if public:
@@ -199,7 +201,9 @@ class Mega(object):
         # Integrity check
         if (file_mac[0] ^ file_mac[1], file_mac[2] ^ file_mac[3]) != meta_mac:
             raise ValueError('MAC mismatch')
-
+        
+        return file_name
+    
     def get_public_url(self, file_id, file_key):
         public_handle = self.api_req({'a': 'l', 'n': file_id})
         decrypted_key = a32_to_base64(file_key)
